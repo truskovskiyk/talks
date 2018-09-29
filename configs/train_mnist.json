@@ -1,0 +1,9 @@
+{
+  "batch_size": 32,
+  "epochs": 10,
+  "log_interval": 100,
+  "lr": 0.001,
+  "num_workers": 4,
+  "model_type": "linear",
+  "seed": 42
+}
