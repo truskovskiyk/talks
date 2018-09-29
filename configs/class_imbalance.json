@@ -1,0 +1,11 @@
+{
+  "batch_size": 32,
+  "epochs": 10,
+  "log_interval": 100,
+  "lr": 0.001,
+  "num_workers": 4,
+  "model_type": "fc",
+  "seed": 42,
+  "imbalance_ratio": 0.5,
+  "num_minor_classes": 5
+}
