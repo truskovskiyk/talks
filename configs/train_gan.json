@@ -1,0 +1,11 @@
+{
+  "batch_size": 32,
+  "epochs": 100,
+  "log_interval": 100,
+  "lr": 0.0002,
+  "num_workers": 4,
+  "model_type": "fc",
+  "seed": 42,
+  "latent_dim": 100,
+  "image_shape": [1, 28, 28]
+}

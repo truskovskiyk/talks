@@ -23,6 +23,7 @@ class MNISTTrainer:
             self._validate(epoch)
 
     def _train(self, epoch: int):
+        print(f"start {epoch} epoch")
 
         self.model.train()
         for batch_idx, (data, target) in enumerate(self.train_loader):
@@ -39,6 +40,8 @@ class MNISTTrainer:
                 self.summary_writer.add_scalar('mnist/train_loss', loss.item(), self.global_training_step)
 
     def _validate(self, epoch):
+        print(f"start {epoch} epoch")
+
         self.model.eval()
         test_loss = 0
         correct = 0

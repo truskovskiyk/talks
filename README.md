@@ -10,11 +10,20 @@
 virtualenv -p python3.6 venv
 source ./venv/bin/activate
 pip install -r requirements.txt
+export PYTHONPATH=.
 ```
 
+# Run tensorboard
+```bash
+tensorboard --logdir . --port 8888 --host 0.0.0.0
+```
 
 # MNIST trainer
 ```bash
 python experiments/train_mnist.py --config-path ./configs/train_mnist.json
-tensorboard --logdir . --port 8888 --host 0.0.0.0
+```
+
+# MNIST GAN trainer
+```bash
+python experiments/train_gan.py  --config-path ./configs/train_gan.json
 ```

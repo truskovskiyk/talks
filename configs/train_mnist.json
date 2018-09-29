@@ -4,6 +4,6 @@
   "log_interval": 100,
   "lr": 0.001,
   "num_workers": 4,
-  "model_type": "linear",
+  "model_type": "fc",
   "seed": 42
 }
