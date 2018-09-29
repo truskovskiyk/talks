@@ -45,4 +45,4 @@ python experiments/class_imbalance.py  --config-path ./configs/class_imbalance.j
 * [Which Training Methods for GANs do actually Converge?](http://proceedings.mlr.press/v80/mescheder18a/mescheder18a.pdf)
 * [An empirical study on evaluation metrics of generative adversarial networks](https://arxiv.org/abs/1806.07755)
 * [Improved Techniques for Training GANs](https://arxiv.org/abs/1606.03498)
-* [Medical Image Synthesis for Data Augmentation and Anonymization using Generative Adversarial Networks(https://arxiv.org/abs/1807.10225)
+* [Medical Image Synthesis for Data Augmentation and Anonymization using Generative Adversarial Networks](https://arxiv.org/abs/1807.10225)
