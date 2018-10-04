@@ -62,6 +62,8 @@ def get_unbalanced_dataset(imbalance_ratio: float, num_minor_classes: int, batch
     new_train_ds = make_imbalance_dataset(dataset=train_ds, indexes=indexes, labels=labels,
                                           num_minor_classes=num_minor_classes, imbalance_ratio=imbalance_ratio,
                                           classes=classes)
+
+
     train_loader = torch.utils.data.DataLoader(new_train_ds, batch_size=batch_size, shuffle=True,
                                                num_workers=num_workers)
 
@@ -96,6 +98,8 @@ def main():
                                                        num_minor_classes=num_minor_classes,
                                                        num_workers=num_workers,
                                                        batch_size=batch_size)
+
+
     model = get_model(model_type=model_type).to(device)
     mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
                                  lr=lr, device=device, log_interval=log_interval)

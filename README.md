@@ -20,6 +20,12 @@ export PYTHONPATH=.
 tensorboard --logdir . --port 8888 --host 0.0.0.0
 ```
 
+# Class Imbalance
+```bash
+python experiments/class_imbalance.py  --config-path ./configs/class_imbalance.json
+```
+
+
 # MNIST trainer
 ```bash
 python experiments/train_mnist.py --config-path ./configs/train_mnist.json
@@ -30,20 +36,21 @@ python experiments/train_mnist.py --config-path ./configs/train_mnist.json
 python experiments/train_gan.py  --config-path ./configs/train_gan.json
 ```
 
-# Class Imbalance
-```bash
-python experiments/class_imbalance.py  --config-path ./configs/class_imbalance.json
-```
+
 
 
 # References
 * [Generative Adversarial Networks](https://arxiv.org/abs/1406.2661)
 * [A systematic study of the class imbalance problem in convolutional neural networks](https://arxiv.org/abs/1710.05381)
+
 * [BAGAN: Data Augmentation with Balancing GAN](https://arxiv.org/abs/1803.09655)
 * [Deep Imbalanced Learning for Face Recognition and Attribute Prediction](https://arxiv.org/abs/1806.00194)
+
 * [A Classification–Based Study of Covariate Shift in GAN Distributions](http://proceedings.mlr.press/v80/santurkar18a/santurkar18a.pdf)
 * [Which Training Methods for GANs do actually Converge?](http://proceedings.mlr.press/v80/mescheder18a/mescheder18a.pdf)
+
 * [An empirical study on evaluation metrics of generative adversarial networks](https://arxiv.org/abs/1806.07755)
 * [Improved Techniques for Training GANs](https://arxiv.org/abs/1606.03498)
 * [Medical Image Synthesis for Data Augmentation and Anonymization using Generative Adversarial Networks](https://arxiv.org/abs/1807.10225)
+
 * [Data Augmentation Generative Adversarial Networks](https://arxiv.org/abs/1711.04340)

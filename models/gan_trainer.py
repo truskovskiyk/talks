@@ -8,7 +8,9 @@ import torchvision.utils as vutils
 class MNISTGANTrainer:
     def __init__(self, generator: nn.Module, discriminator: nn.Module, device, train_loader: DataLoader,
                  lr: float, log_interval: int, latent_dim: int, epochs: int):
+
         self.adversarial_loss = torch.nn.BCELoss().to(device)
+
         self.generator = generator.to(device)
         self.discriminator = discriminator.to(device)
 
@@ -17,6 +19,7 @@ class MNISTGANTrainer:
 
         self.optimizer_generator = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
         self.optimizer_discriminator = torch.optim.Adam(discriminator.parameters(), lr=lr, betas=(b1, b2))
+
         self.train_loader = train_loader
         self.n_epochs = epochs
         self.device = device
