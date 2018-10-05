@@ -17,7 +17,7 @@ export PYTHONPATH=.
 
 # Run tensorboard
 ```bash
-tensorboard --logdir . --port 8888 --host 0.0.0.0
+tensorboard --logdir . --port 8887 --host 0.0.0.0
 ```
 
 # Class Imbalance

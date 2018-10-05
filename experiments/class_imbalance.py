@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, Dataset, Subset
 import numpy as np
 from imblearn.datasets import make_imbalance
 
-from models import NetConv, NetFC, MNISTTrainer
+from models import NetFC, MNISTTrainer
 from common import get_mnist
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,6 @@ def get_unbalanced_dataset(imbalance_ratio: float, num_minor_classes: int, batch
                                           num_minor_classes=num_minor_classes, imbalance_ratio=imbalance_ratio,
                                           classes=classes)
 
-
     train_loader = torch.utils.data.DataLoader(new_train_ds, batch_size=batch_size, shuffle=True,
                                                num_workers=num_workers)
 
@@ -73,9 +72,7 @@ def get_unbalanced_dataset(imbalance_ratio: float, num_minor_classes: int, batch
 
 
 def get_model(model_type="fc"):
-    if model_type == "conv":
-        return NetConv()
-    elif model_type == "fc":
+    if model_type == "fc":
         return NetFC()
     else:
         raise ValueError(f"wrong type of {model_type}")
@@ -103,10 +100,10 @@ def main():
 
     print(len(train_loader.dataset))
     print(train_loader.dataset)
-    # model = get_model(model_type=model_type).to(device)
-    # mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
-    #                              lr=lr, device=device, log_interval=log_interval)
-    # mnist_trainer.train_model()
+    model = get_model(model_type=model_type).to(device)
+    mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
+                                 lr=lr, device=device, log_interval=log_interval)
+    mnist_trainer.train_model()
 
 
 if __name__ == '__main__':

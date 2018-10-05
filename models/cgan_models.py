@@ -48,7 +48,8 @@ class Discriminator(nn.Module):
             nn.Linear(512, 512),
             nn.Dropout(0.4),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(512, 1)
+            nn.Linear(512, 1),
+            nn.Sigmoid()
         )
 
     def forward(self, img, labels):
