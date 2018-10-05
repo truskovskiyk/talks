@@ -5,13 +5,7 @@ from tensorboardX import SummaryWriter
 import torchvision.utils as vutils
 
 
-def weights_init_normal(m):
-    classname = m.__class__.__name__
-    if classname.find('Conv') != -1:
-        torch.nn.init.normal_(m.weight.data, 0.0, 0.02)
-    elif classname.find('BatchNorm2d') != -1:
-        torch.nn.init.normal_(m.weight.data, 1.0, 0.02)
-        torch.nn.init.constant_(m.bias.data, 0.0)
+from models.utils import weights_init_normal
 
 
 class MNISTGANTrainer:
@@ -24,8 +18,8 @@ class MNISTGANTrainer:
         self.discriminator = discriminator.to(device)
 
         # Initialize weights
-        self.generatorgenerator.apply(weights_init_normal)
-        self.discriminatordiscriminator.apply(weights_init_normal)
+        self.generator.apply(weights_init_normal)
+        self.discriminator.apply(weights_init_normal)
 
         b1 = 0.5
         b2 = 0.999
