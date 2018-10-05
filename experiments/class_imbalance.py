@@ -84,6 +84,8 @@ def get_model(model_type="fc"):
 def main():
     config = get_config()
     torch.manual_seed(config['seed'])
+    np.random.seed(config['seed'])
+
     log_interval = config['log_interval']
     lr = config['lr']
     model_type = config['model_type']
@@ -99,11 +101,12 @@ def main():
                                                        num_workers=num_workers,
                                                        batch_size=batch_size)
 
-
-    model = get_model(model_type=model_type).to(device)
-    mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
-                                 lr=lr, device=device, log_interval=log_interval)
-    mnist_trainer.train_model()
+    print(len(train_loader.dataset))
+    print(train_loader.dataset)
+    # model = get_model(model_type=model_type).to(device)
+    # mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
+    #                              lr=lr, device=device, log_interval=log_interval)
+    # mnist_trainer.train_model()
 
 
 if __name__ == '__main__':

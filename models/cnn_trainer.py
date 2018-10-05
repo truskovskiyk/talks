@@ -1,6 +1,6 @@
+from tqdm import tqdm
 import torch
 import torch.nn.functional as F
-from tqdm import tqdm
 from tensorboardX import SummaryWriter
 
 

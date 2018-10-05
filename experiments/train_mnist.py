@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import torch
 
-from models import NetFC, MNISTTrainer
+from models import NetConv, NetFC, MNISTTrainer
 from common import get_mnist_loaders
 
 
@@ -18,7 +18,9 @@ def get_config():
 
 
 def get_model(model_type="fc"):
-    if model_type == "fc":
+    if model_type == "conv":
+        return NetConv()
+    elif model_type == "fc":
         return NetFC()
     else:
         raise ValueError(f"wrong type of {model_type}")
