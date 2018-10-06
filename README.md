@@ -26,7 +26,7 @@ tensorboard --logdir . --port 8887 --host 0.0.0.0
 
 # MNIST GAN trainer
 ```bash
-python experiments/train_gan.py  --config-path ./configs/train_gan.json
+python -m experiments.train_gan  --config-path ./configs/train_gan.json
 ```
 
 # MNIST conditional GAN trainer
