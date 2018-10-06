@@ -4,13 +4,17 @@ import logging
 from pathlib import Path
 from collections import Counter
 
+import torchvision.utils as vutils
 import torch
-from torch.utils.data import DataLoader, Dataset, Subset
+from torch.utils.data import DataLoader, Dataset, Subset, ConcatDataset
 import numpy as np
 from imblearn.datasets import make_imbalance
 
 from models import NetFC, MNISTTrainer
 from common import get_mnist
+from models.cgan_trainer import CGANTrainer
+
+from common.sampler import sample_classes
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +68,7 @@ def get_unbalanced_dataset(imbalance_ratio: float, num_minor_classes: int, batch
                                           classes=classes)
 
     train_loader = torch.utils.data.DataLoader(new_train_ds, batch_size=batch_size, shuffle=True,
-                                               num_workers=num_workers)
+                                               num_workers=num_workers, drop_last=True)
 
     test_loader = torch.utils.data.DataLoader(test_ds, batch_size=batch_size, shuffle=False,
                                               num_workers=num_workers)
@@ -76,6 +80,14 @@ def get_model(model_type="fc"):
         return NetFC()
     else:
         raise ValueError(f"wrong type of {model_type}")
+
+
+def dataset_as_numpy(ds: Dataset, num_workers: int = 4, shuffle: bool = True):
+    loader = DataLoader(ds, batch_size=len(ds), shuffle=shuffle,
+                        num_workers=num_workers)
+    x, y = next(iter(loader))
+    x, y = x.squeeze().numpy(), y.numpy()
+    return x, y
 
 
 def main():
@@ -100,6 +112,19 @@ def main():
 
     print(len(train_loader.dataset))
     print(train_loader.dataset)
+
+    # Step 1 train gan
+    # t = CGANTrainer()
+    # t.train_model(train_loader)
+
+    # # Step 2 sample from the gan
+    d = sample_classes(train_loader)
+    new_d = ConcatDataset([d, train_loader.dataset])
+    train_loader = DataLoader(new_d, num_workers=num_workers, batch_size=batch_size, shuffle=True)
+
+    print(len(train_loader.dataset))
+    print(train_loader.dataset)
+    #
     model = get_model(model_type=model_type).to(device)
     mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
                                  lr=lr, device=device, log_interval=log_interval)

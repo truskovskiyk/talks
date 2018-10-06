@@ -4,7 +4,7 @@ from pathlib import Path
 import torch
 
 from models.cgan_models import Generator, Discriminator
-from models.cgan_trainer import ConditionalGANTrainer
+from models.cgan_trainer import CGANTrainer
 from common import get_mnist_loaders
 
 
@@ -43,14 +43,18 @@ def main():
     torch.manual_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    generator, discriminator = get_model(latent_dim=latent_dim, img_shape=img_shape, model_type=model_type)
+    # generator, discriminator = get_model(latent_dim=latent_dim, img_shape=img_shape, model_type=model_type)
     train_loader, _ = get_mnist_loaders(num_workers=num_workers, batch_size=batch_size)
 
-    mnist_gan_trainer = ConditionalGANTrainer(generator=generator, discriminator=discriminator,
-                                              device=device, train_loader=train_loader,
-                                              lr=lr, log_interval=log_interval, latent_dim=latent_dim,
-                                              epochs=epochs)
-    mnist_gan_trainer.train_model()
+    t = CGANTrainer()
+    t.train_model(train_loader)
+
+
+    # mnist_gan_trainer = ConditionalGANTrainer(generator=generator, discriminator=discriminator,
+    #                                           device=device, train_loader=train_loader,
+    #                                           lr=lr, log_interval=log_interval, latent_dim=latent_dim,
+    #                                           epochs=epochs)
+    # mnist_gan_trainer.train_model()
 
 
 if __name__ == '__main__':
