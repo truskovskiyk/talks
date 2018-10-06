@@ -11,7 +11,6 @@ from imblearn.datasets import make_imbalance
 
 from models import NetFC, MNISTTrainer
 from common import get_mnist
-from models.cgan_trainer import CGANTrainer
 from common.sampler import fix_dataset
 
 
@@ -27,7 +26,6 @@ def get_config():
 
 def create_imbalance_ration(labels: np.array, num_minor_classes: int, imbalance_ratio: float, classes: tuple):
     assert len(classes) > num_minor_classes
-
     class_counter = Counter(labels)
     minor_classes = np.random.choice(classes, size=num_minor_classes, replace=False)
     for minor_class in minor_classes:
@@ -53,20 +51,15 @@ def make_imbalance_dataset(dataset: Dataset,
 
 def get_unbalanced_dataset(imbalance_ratio: float, num_minor_classes: int, batch_size: int, num_workers: int):
     train_ds, test_ds = get_mnist()
-
     labels = train_ds.train_labels.numpy()
     indexes = np.arange(len(train_ds))
     classes = train_ds.train_labels.unique().numpy().tolist()
-
     new_train_ds = make_imbalance_dataset(dataset=train_ds, indexes=indexes, labels=labels,
                                           num_minor_classes=num_minor_classes, imbalance_ratio=imbalance_ratio,
                                           classes=classes)
-
     train_loader = torch.utils.data.DataLoader(new_train_ds, batch_size=batch_size, shuffle=True,
                                                num_workers=num_workers, drop_last=True)
-
-    test_loader = torch.utils.data.DataLoader(test_ds, batch_size=batch_size, shuffle=False,
-                                              num_workers=num_workers)
+    test_loader = torch.utils.data.DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
 
 
@@ -87,7 +80,7 @@ def dataset_as_numpy(ds: Dataset, num_workers: int = 4, shuffle: bool = True):
 
 def main():
     config = get_config()
-    seed = 17
+    seed = config['seed']
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -101,6 +94,7 @@ def main():
     num_minor_classes = config['num_minor_classes']
     use_gan = config['use_gan']
     n_epoch = config['n_epoch']
+    name = config['name']
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -122,6 +116,8 @@ def main():
         with open("train_loader.pth", "wb") as f:
             pickle.dump(train_loader, f)
 
+        # with open("data/train_loader.pth", "rb") as f:
+        #     train_loader = pickle.load(f)
         print(len(train_loader.dataset))
         print(train_loader.dataset)
 
@@ -132,7 +128,8 @@ def main():
                                  lr=lr,
                                  device=device,
                                  log_interval=log_interval,
-                                 n_epoch=n_epoch)
+                                 n_epoch=n_epoch,
+                                 name=name)
     mnist_trainer.train_model()
 
 

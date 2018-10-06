@@ -109,3 +109,8 @@ temp/
 cgan_train/
 gan_train/
 mnist_train/
+data/
+data.zip
+class_imbalance1/
+class_imbalance2/
+class_imbalance3/

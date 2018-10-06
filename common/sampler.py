@@ -79,7 +79,7 @@ def _sample(labels, generator):
 
 def fix_dataset(train_loader: DataLoader):
     generator = ModelG()
-    state_dict = torch.load("modelsCGAN_DCGAN/model_g_epoch_15.pth")['state_dict']
+    state_dict = torch.load("data/g_epoch_15.pth")['state_dict']
     generator.load_state_dict(state_dict)
     generator = generator.cuda()
 
