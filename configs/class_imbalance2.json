@@ -1,0 +1,13 @@
+{
+  "name": "class_imbalance2",
+  "batch_size": 32,
+  "n_epoch": 10,
+  "log_interval": 100,
+  "lr": 0.00001,
+  "num_workers": 2,
+  "model_type": "fc",
+  "seed": 17,
+  "imbalance_ratio": 0.5,
+  "num_minor_classes": 5,
+  "use_gan": false
+}

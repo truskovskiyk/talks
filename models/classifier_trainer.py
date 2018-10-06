@@ -5,16 +5,16 @@ from tensorboardX import SummaryWriter
 
 
 class MNISTTrainer:
-    def __init__(self, model, train_loader, test_loader, lr, device, log_interval):
+    def __init__(self, model, train_loader, test_loader, lr, device, log_interval, n_epoch, name):
         self.model = model
         self.train_loader = train_loader
         self.test_loader = test_loader
 
         self.device = device
-        self.n_epoch = 10
+        self.n_epoch = n_epoch
         self.optimizer = torch.optim.Adam(model.parameters(), lr=lr)
         self.log_interval = log_interval
-        self.summary_writer = SummaryWriter()
+        self.summary_writer = SummaryWriter(log_dir=name)
         self.global_training_step = 0
 
     def train_model(self):

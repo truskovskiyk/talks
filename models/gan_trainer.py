@@ -4,13 +4,13 @@ from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 import torchvision.utils as vutils
 
-
-from models.utils import weights_init_normal
+from common import weights_init_normal
 
 
 class MNISTGANTrainer:
-    def __init__(self, generator: nn.Module, discriminator: nn.Module, device, train_loader: DataLoader,
-                 lr: float, log_interval: int, latent_dim: int, epochs: int):
+    def __init__(self, *, generator: nn.Module, discriminator: nn.Module, device, train_loader: DataLoader,
+                 lr: float, log_interval: int, latent_dim: int, n_epoch: int, name: str,
+                 b1: float = 0.5, b2: float = 0.999):
 
         self.adversarial_loss = torch.nn.BCELoss().to(device)
 
@@ -21,17 +21,14 @@ class MNISTGANTrainer:
         self.generator.apply(weights_init_normal)
         self.discriminator.apply(weights_init_normal)
 
-        b1 = 0.5
-        b2 = 0.999
-
         self.optimizer_generator = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
         self.optimizer_discriminator = torch.optim.Adam(discriminator.parameters(), lr=lr, betas=(b1, b2))
 
         self.train_loader = train_loader
-        self.n_epochs = epochs
+        self.n_epochs = n_epoch
         self.device = device
         self.latent_size = latent_dim
-        self.summary_writer = SummaryWriter()
+        self.summary_writer = SummaryWriter(name)
         self.log_interval = log_interval
         self.n_show_samples = 10
         self.global_step = 0
