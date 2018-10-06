@@ -1,4 +1,5 @@
 {
+  "name": "gan_train",
   "batch_size": 32,
   "n_epoch": 100,
   "log_interval": 100,

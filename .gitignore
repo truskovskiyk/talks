@@ -106,3 +106,6 @@ venv.bak/
 best_state_dict.pth
 runs/
 temp/
+cgan_train/
+gan_train/
+mnist_train/

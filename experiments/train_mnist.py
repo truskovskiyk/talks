@@ -33,13 +33,20 @@ def main():
     batch_size = config['batch_size']
     num_workers = config['num_workers']
     n_epoch = config['n_epoch']
+    name = config['name']
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     train_loader, test_loader = get_mnist_loaders(num_workers=num_workers, batch_size=batch_size)
     model = get_model(model_type=model_type).to(device)
-    mnist_trainer = MNISTTrainer(model, train_loader, test_loader, lr=lr, device=device, log_interval=log_interval,
-                                 n_epoch=n_epoch)
+    mnist_trainer = MNISTTrainer(model=model,
+                                 train_loader=train_loader,
+                                 test_loader=test_loader,
+                                 lr=lr,
+                                 device=device,
+                                 log_interval=log_interval,
+                                 n_epoch=n_epoch,
+                                 name=name)
     mnist_trainer.train_model()
 
 

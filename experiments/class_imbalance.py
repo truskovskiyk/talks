@@ -92,7 +92,6 @@ def main():
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
-
     log_interval = config['log_interval']
     lr = config['lr']
     model_type = config['model_type']

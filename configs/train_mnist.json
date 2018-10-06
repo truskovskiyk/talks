@@ -1,8 +1,9 @@
 {
+  "name": "mnist_train",
   "batch_size": 32,
   "n_epoch": 10,
   "log_interval": 100,
-  "lr": 0.01,
+  "lr": 0.00001,
   "num_workers": 4,
   "model_type": "fc",
   "seed": 42

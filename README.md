@@ -38,7 +38,10 @@ python experiments/train_mnist.py --config-path ./configs/train_mnist.json
 python experiments/train_gan.py  --config-path ./configs/train_gan.json
 ```
 
-
+# MNIST conditional GAN trainer
+```bash
+python experiments/train_cgan.py  --config-path ./configs/train_cgan.json
+```
 
 
 # References

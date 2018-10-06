@@ -38,6 +38,7 @@ def main():
     num_workers = config['num_workers']
     n_epoch = config['n_epoch']
     model_type = config['model_type']
+    name = config['name']
 
     torch.manual_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -45,10 +46,15 @@ def main():
     generator, discriminator = get_model(latent_dim=latent_dim, img_shape=img_shape, model_type=model_type)
     train_loader, _ = get_mnist_loaders(num_workers=num_workers, batch_size=batch_size)
 
-    mnist_gan_trainer = MNISTGANTrainer(generator=generator, discriminator=discriminator,
-                                        device=device, train_loader=train_loader,
-                                        lr=lr, log_interval=log_interval, latent_dim=latent_dim,
-                                        n_epoch=n_epoch)
+    mnist_gan_trainer = MNISTGANTrainer(generator=generator,
+                                        discriminator=discriminator,
+                                        device=device,
+                                        train_loader=train_loader,
+                                        lr=lr,
+                                        log_interval=log_interval,
+                                        latent_dim=latent_dim,
+                                        n_epoch=n_epoch,
+                                        name=name)
     mnist_gan_trainer.train_model()
 
 
