@@ -1,6 +1,6 @@
 {
   "batch_size": 32,
-  "epochs": 10,
+  "n_epoch": 10,
   "log_interval": 100,
   "lr": 0.01,
   "num_workers": 4,

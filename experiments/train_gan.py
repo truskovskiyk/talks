@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import torch
 
-from models import GeneratorFC, DiscriminatorFC, MNISTGANTrainer
+from models import Generator, Discriminator, MNISTGANTrainer
 from common import get_mnist_loaders
 
 
@@ -19,8 +19,8 @@ def get_config():
 
 def get_model(latent_dim, img_shape, model_type="fc"):
     if model_type == "fc":
-        generator = GeneratorFC(latent_dim=latent_dim, img_shape=img_shape)
-        discriminator = DiscriminatorFC(img_shape=img_shape)
+        generator = Generator(latent_dim=latent_dim, img_shape=img_shape)
+        discriminator = Discriminator(img_shape=img_shape)
         return generator, discriminator
     else:
         raise ValueError(f"wrong type of {model_type}")
@@ -36,7 +36,7 @@ def main():
     img_shape = tuple(config["image_shape"])
     batch_size = config['batch_size']
     num_workers = config['num_workers']
-    epochs = config['epochs']
+    n_epoch = config['n_epoch']
     model_type = config['model_type']
 
     torch.manual_seed(seed)
@@ -48,7 +48,7 @@ def main():
     mnist_gan_trainer = MNISTGANTrainer(generator=generator, discriminator=discriminator,
                                         device=device, train_loader=train_loader,
                                         lr=lr, log_interval=log_interval, latent_dim=latent_dim,
-                                        epochs=epochs)
+                                        n_epoch=n_epoch)
     mnist_gan_trainer.train_model()
 
 

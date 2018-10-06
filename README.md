@@ -24,7 +24,7 @@ tensorboard --logdir . --port 8887 --host 0.0.0.0
 ```bash
 python experiments/class_imbalance.py  --config-path ./configs/class_imbalance2.json
 
-python experiments/class_imbalance.py  --config-path ./configs/class_imbalance.json
+python experiments/class_imbalance.py  --config-path ./configs/class_imbalance1.json
 ```
 
 

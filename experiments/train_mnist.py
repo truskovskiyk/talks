@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import torch
 
-from models import NetConv, NetFC, MNISTTrainer
+from models import NetFC, MNISTTrainer
 from common import get_mnist_loaders
 
 
@@ -18,9 +18,7 @@ def get_config():
 
 
 def get_model(model_type="fc"):
-    if model_type == "conv":
-        return NetConv()
-    elif model_type == "fc":
+    if model_type == "fc":
         return NetFC()
     else:
         raise ValueError(f"wrong type of {model_type}")
@@ -34,12 +32,14 @@ def main():
     model_type = config['model_type']
     batch_size = config['batch_size']
     num_workers = config['num_workers']
+    n_epoch = config['n_epoch']
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     train_loader, test_loader = get_mnist_loaders(num_workers=num_workers, batch_size=batch_size)
     model = get_model(model_type=model_type).to(device)
-    mnist_trainer = MNISTTrainer(model, train_loader, test_loader, lr=lr, device=device, log_interval=log_interval)
+    mnist_trainer = MNISTTrainer(model, train_loader, test_loader, lr=lr, device=device, log_interval=log_interval,
+                                 n_epoch=n_epoch)
     mnist_trainer.train_model()
 
 

@@ -1,22 +1,18 @@
 import argparse
 import json
-import logging
+import pickle
 from pathlib import Path
 from collections import Counter
 
-import torchvision.utils as vutils
 import torch
-from torch.utils.data import DataLoader, Dataset, Subset, ConcatDataset
+from torch.utils.data import DataLoader, Dataset, Subset
 import numpy as np
 from imblearn.datasets import make_imbalance
 
 from models import NetFC, MNISTTrainer
 from common import get_mnist
 from models.cgan_trainer import CGANTrainer
-
-from common.sampler import sample_classes
-
-logger = logging.getLogger(__name__)
+from common.sampler import fix_dataset
 
 
 def get_config():
@@ -34,7 +30,6 @@ def create_imbalance_ration(labels: np.array, num_minor_classes: int, imbalance_
 
     class_counter = Counter(labels)
     minor_classes = np.random.choice(classes, size=num_minor_classes, replace=False)
-    logger.info(f"have chosen {minor_classes} as minor_classes")
     for minor_class in minor_classes:
         class_index = classes.index(minor_class)
         # update old one class_ratio
@@ -92,8 +87,11 @@ def dataset_as_numpy(ds: Dataset, num_workers: int = 4, shuffle: bool = True):
 
 def main():
     config = get_config()
-    torch.manual_seed(config['seed'])
-    np.random.seed(config['seed'])
+    seed = 17
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
 
     log_interval = config['log_interval']
     lr = config['lr']
@@ -102,6 +100,8 @@ def main():
     num_workers = config['num_workers']
     imbalance_ratio = config['imbalance_ratio']
     num_minor_classes = config['num_minor_classes']
+    use_gan = config['use_gan']
+    n_epoch = config['n_epoch']
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -113,21 +113,27 @@ def main():
     print(len(train_loader.dataset))
     print(train_loader.dataset)
 
-    # Step 1 train gan
-    # t = CGANTrainer()
-    # t.train_model(train_loader)
+    if use_gan:
+        # Step 1 train gan
+        # t = CGANTrainer()
+        # t.train_model(train_loader)
 
-    # # Step 2 sample from the gan
-    d = sample_classes(train_loader)
-    new_d = ConcatDataset([d, train_loader.dataset])
-    train_loader = DataLoader(new_d, num_workers=num_workers, batch_size=batch_size, shuffle=True)
+        # # Step 2 sample from the gan
+        train_loader = fix_dataset(train_loader)
+        with open("train_loader.pth", "wb") as f:
+            pickle.dump(train_loader, f)
 
-    print(len(train_loader.dataset))
-    print(train_loader.dataset)
-    #
+        print(len(train_loader.dataset))
+        print(train_loader.dataset)
+
     model = get_model(model_type=model_type).to(device)
-    mnist_trainer = MNISTTrainer(model=model, train_loader=train_loader, test_loader=test_loader,
-                                 lr=lr, device=device, log_interval=log_interval)
+    mnist_trainer = MNISTTrainer(model=model,
+                                 train_loader=train_loader,
+                                 test_loader=test_loader,
+                                 lr=lr,
+                                 device=device,
+                                 log_interval=log_interval,
+                                 n_epoch=n_epoch)
     mnist_trainer.train_model()
 
 

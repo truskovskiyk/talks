@@ -1,11 +1,11 @@
 import numpy as np
-import torch.nn as nn
 import torch
+import torch.nn as nn
 
 
-class Generator(nn.Module):
+class ConditionalGenerator(nn.Module):
     def __init__(self, n_classes, latent_dim, img_shape):
-        super(Generator, self).__init__()
+        super(ConditionalGenerator, self).__init__()
         self.img_shape = img_shape
         self.label_emb = nn.Embedding(n_classes, n_classes)
 
@@ -33,9 +33,9 @@ class Generator(nn.Module):
         return img
 
 
-class Discriminator(nn.Module):
+class ConditionalDiscriminator(nn.Module):
     def __init__(self, n_classes, img_shape):
-        super(Discriminator, self).__init__()
+        super(ConditionalDiscriminator, self).__init__()
 
         self.label_embedding = nn.Embedding(n_classes, n_classes)
 

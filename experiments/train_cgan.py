@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import torch
 
-from models.cgan_models import Generator, Discriminator
+from models.cgan_models import ConditionalGenerator, ConditionalDiscriminator
 from models.cgan_trainer import CGANTrainer
 from common import get_mnist_loaders
 
@@ -20,8 +20,8 @@ def get_config():
 
 def get_model(latent_dim, img_shape, model_type="fc"):
     if model_type == "fc":
-        generator = Generator(latent_dim=latent_dim, img_shape=img_shape, n_classes=10)
-        discriminator = Discriminator(img_shape=img_shape, n_classes=10)
+        generator = ConditionalGenerator(latent_dim=latent_dim, img_shape=img_shape, n_classes=10)
+        discriminator = ConditionalDiscriminator(img_shape=img_shape, n_classes=10)
         return generator, discriminator
     else:
         raise ValueError(f"wrong type of {model_type}")
@@ -49,13 +49,5 @@ def main():
     t = CGANTrainer()
     t.train_model(train_loader)
 
-
-    # mnist_gan_trainer = ConditionalGANTrainer(generator=generator, discriminator=discriminator,
-    #                                           device=device, train_loader=train_loader,
-    #                                           lr=lr, log_interval=log_interval, latent_dim=latent_dim,
-    #                                           epochs=epochs)
-    # mnist_gan_trainer.train_model()
-
-
-if __name__ == '__main__':
-    main()
+    if __name__ == '__main__':
+        main()

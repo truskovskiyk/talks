@@ -8,5 +8,5 @@
   "seed": 42,
   "imbalance_ratio": 0.5,
   "num_minor_classes": 5,
-  "use_gan": false
+  "use_gan": true
 }

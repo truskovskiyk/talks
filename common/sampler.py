@@ -1,7 +1,7 @@
 from collections import Counter
 
 import numpy as np
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, ConcatDataset
 
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,7 +9,7 @@ import torch
 
 
 class ModelG(nn.Module):
-    def __init__(self, z_dim):
+    def __init__(self, z_dim=100):
         self.z_dim = z_dim
         super(ModelG, self).__init__()
         self.fc2 = nn.Linear(10, 1000)
@@ -37,14 +37,13 @@ class ModelG(nn.Module):
 
 
 def dataset_as_numpy(ds, num_workers: int = 4, shuffle: bool = True):
-    loader = DataLoader(ds, batch_size=len(ds), shuffle=shuffle,
-                        num_workers=num_workers)
+    loader = DataLoader(ds, batch_size=len(ds), shuffle=shuffle, num_workers=num_workers)
     x, y = next(iter(loader))
     x, y = x.squeeze().numpy(), y.numpy()
     return x, y
 
 
-class D(Dataset):
+class TensorDataset(Dataset):
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -78,33 +77,13 @@ def _sample(labels, generator):
     return images
 
 
-def sample_classes(dataloader):
-    img_shape = (1, 28, 28)
-    n_classes = 10
-    latent_dim = 100
-    n_epochs = 200
-    save_each = 5000
-    # Loss functions
-    # Initialize generator and discriminator
-
-    # ModelG(z_dim=100)
-    generator = ModelG(z_dim=100)
-    state_dict = torch.load("modelsCCC/model_g_epoch_15.pth")['state_dict']
+def fix_dataset(train_loader: DataLoader):
+    generator = ModelG()
+    state_dict = torch.load("modelsCGAN_DCGAN/model_g_epoch_15.pth")['state_dict']
     generator.load_state_dict(state_dict)
     generator = generator.cuda()
 
-    # a = np.array([1, 0, 3])
-    # b = np.zeros((3, 10))
-    # b[np.arange(3), a] = 1
-    #
-    # z = np.random.normal(0, 1, (3, 100))
-    #
-    # z = torch.FloatTensor(z).cuda()
-    # b = torch.FloatTensor(b).cuda()
-    # x = generator(z, b)
-    # print(x)
-    _, y = dataset_as_numpy(dataloader.dataset)
-    from collections import Counter
+    _, y = dataset_as_numpy(train_loader.dataset)
     c = Counter(y)
     max_total = c.most_common()[0][1]
     labels = []
@@ -116,8 +95,10 @@ def sample_classes(dataloader):
     images = _sample(labels=labels, generator=generator)
     images = torch.cat(images)
     labels = torch.LongTensor(labels)
-    return D(x=images.cpu().detach(), y=labels.cpu().detach())
+    d = TensorDataset(x=images.cpu().detach(), y=labels.cpu().detach())
 
-
-if __name__ == '__main__':
-    sample_classes(None)
+    new_d = ConcatDataset([d, train_loader.dataset])
+    new_train_loader = DataLoader(new_d, num_workers=train_loader.num_workers,
+                                  batch_size=train_loader.batch_size,
+                                  shuffle=True)
+    return new_train_loader
