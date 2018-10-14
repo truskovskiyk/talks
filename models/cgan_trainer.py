@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import torchvision.utils as vutils
-from torch.autograd import Variable
 from tensorboardX import SummaryWriter
 
 from common import weights_init_normal

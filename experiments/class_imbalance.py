@@ -112,12 +112,12 @@ def main():
         # t.train_model(train_loader)
 
         # # Step 2 sample from the gan
-        train_loader = fix_dataset(train_loader)
-        with open("train_loader.pth", "wb") as f:
-            pickle.dump(train_loader, f)
+        # train_loader = fix_dataset(train_loader)
+        # with open("train_loader.pth", "wb") as f:
+        #     pickle.dump(train_loader, f)
 
-        # with open("data/train_loader.pth", "rb") as f:
-        #     train_loader = pickle.load(f)
+        with open("data/train_loader.pth", "rb") as f:
+            train_loader = pickle.load(f)
         print(len(train_loader.dataset))
         print(train_loader.dataset)
 

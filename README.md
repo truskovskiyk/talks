@@ -12,7 +12,11 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 export PYTHONPATH=.
 ```
+
+presentation [here](https://docs.google.com/presentation/d/1lfYx5sONo0nJjBI5KIIW8Y6xuQxBzUWChqh9jWw8f0s/edit?usp=sharing)
 load checkpoint and dataset [here](https://drive.google.com/file/d/1EzaG9crRWCvrkoepOYPl3FD-3Gmct0Ua/view?usp=sharing)
+
+
 # Run tensorboard
 ```bash
 tensorboard --logdir . --port 8887 --host 0.0.0.0
