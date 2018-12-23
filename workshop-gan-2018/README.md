@@ -1,3 +1,10 @@
+## Presentation
+1. [aibooster](https://www.aibooster.com.ua/cth_speaker/kyryl-truskovskyi/)
+2. [aiukraine](https://aiukraine.com/speaker/kyryl-truskovskyi/)
+3. [aiconf](https://aiconf.com.ua/)
+
+[Slides](https://docs.google.com/presentation/d/10TYXI0ySctLna9lWDvTMr9HbCf4aqXfagLc0a_OV5mk/edit#slide=id.p5)
+
 ## Plan
 
 1. Intro
