@@ -41,6 +41,7 @@ python kd/train_mnist.py --config-path ./configs/train_mnist_student.json
 # Distill knowledge
 ```bash
 python kd/train_mnist.py --config-path ./configs/train_mnist_distill.json
+python kd/train_mnist.py --config-path ./configs/train_mnist_distill_unlabeled.json
 ```
 
 
