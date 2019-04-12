@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
-
+from typing import Optional
 from tqdm import tqdm
 
 
@@ -19,35 +20,31 @@ class Distillation(nn.Module):
         return soft_loss * alpha + hard_loss * (1.0 - alpha)
 
 
-def distillation(y, labels, teacher_scores, T, alpha):
+def distillation(y: torch.Tensor, labels: torch.Tensor, teacher_scores: torch.Tensor, T: float, alpha: float) -> torch.Tensor:
     return nn.KLDivLoss()(F.log_softmax(y / T),
                           F.softmax(teacher_scores / T)) * (
                    T * T * 2.0 * alpha
            ) + F.cross_entropy(y, labels) * (1.0 - alpha)
 
 
-def distill_unlabeled(y, teacher_scores, T):
-    return nn.KLDivLoss()(F.log_softmax(y / T),
-                          F.softmax(teacher_scores / T)) * T * T
-
 
 class MNISTTrainer:
     def __init__(
             self,
-            model,
-            train_loader,
-            test_loader,
-            lr,
+            model: nn.Module,
+            train_loader: DataLoader,
+            test_loader: DataLoader,
+            lr: float,
             device,
-            log_interval,
-            n_epoch,
-            name,
-            distill,
-            teacher,
-            unlabeled,
-            temperature,
-            alpha
-    ):
+            log_interval: int,
+            n_epoch: int,
+            name: str,
+            distill: bool,
+            teacher: Optional[nn.Module],
+            temperature: Optional[float],
+            alpha: Optional[float]
+    ) -> None:
+
         self.model = model
         self.train_loader = train_loader
         self.test_loader = test_loader
@@ -61,16 +58,15 @@ class MNISTTrainer:
         self.distill = distill
         self.teacher = teacher
 
-        self.unlabeled = unlabeled
         self.temperature = temperature
         self.alpha = alpha
 
-    def train_model(self):
+    def train_model(self) -> None:
         for epoch in tqdm(range(1, self.n_epoch + 1)):
             self._train(epoch)
             self._validate(epoch)
 
-    def _train(self, epoch: int):
+    def _train(self, epoch: int) -> None:
         print(f"start {epoch} epoch")
 
         self.model.train()
@@ -81,12 +77,7 @@ class MNISTTrainer:
             if self.distill:
                 teacher_output = self.teacher(data)
                 teacher_output = teacher_output.detach()
-                if self.unlabeled:
-                    loss = distill_unlabeled(output, teacher_output,
-                                             T=self.temperature)
-                else:
-
-                    loss = distillation(output, target, teacher_output,
+                loss = distillation(output, target, teacher_output,
                                         T=self.temperature,
                                         alpha=self.alpha)
             else:
@@ -101,7 +92,7 @@ class MNISTTrainer:
                     "mnist/train_loss", loss.item(), self.global_training_step
                 )
 
-    def _validate(self, epoch):
+    def _validate(self, epoch: int) -> None:
         print(f"start {epoch} epoch")
 
         self.model.eval()

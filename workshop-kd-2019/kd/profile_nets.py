@@ -8,8 +8,10 @@ import torch.nn as nn
 from thop import profile
 from tqdm import tqdm
 
+from kd.models import NetStudent, NetTeacher
 
-def plot(result: pd.DataFrame):
+
+def plot(result: pd.DataFrame) -> None:
     sns.set(rc={'figure.figsize': (16, 16)})
     p1 = sns.regplot(data=result, x="gflops", y="params", fit_reg=False,
                      marker="o",
@@ -43,7 +45,7 @@ def get_image_net_models() -> List[Tuple[str, nn.Module]]:
     ]
 
 
-def build_image_net_plot():
+def build_image_net_plot() -> None:
     image_net_models = get_image_net_models()
     input_size = (1, 3, 224, 224)
     result = []
@@ -59,8 +61,8 @@ def build_image_net_plot():
     plot(result)
 
 
-def build_mnist_plot():
-    from kd.models import NetStudent, NetTeacher
+def build_mnist_plot() -> None:
+
     image_net_models = [
         ('NetStudent', NetStudent()),
         ('NetTeacher', NetTeacher())

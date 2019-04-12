@@ -3,7 +3,6 @@
   "distill": true,
   "temperature": 20.0,
   "alpha": 0.9,
-  "unlabeled": false,
 
   "batch_size": 32,
   "n_epoch": 10,

@@ -2,8 +2,7 @@
   "name": "mnist_train_distill_unlabeled",
   "distill": true,
   "temperature": 20.0,
-  "alpha": 0.9,
-  "unlabeled": true,
+  "alpha": 1.0,
 
   "batch_size": 32,
   "n_epoch": 10,

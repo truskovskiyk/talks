@@ -4,12 +4,13 @@ from pathlib import Path
 import logging
 
 import torch
+import torch.nn as nn
 import numpy as np
 import random
 from kd.models import NetStudent, NetTeacher
 from kd.trainer import MNISTTrainer
 from kd.utils import get_mnist_loaders
-
+from typing import Dict, Union
 logger = logging.getLogger(__name__)
 
 
@@ -20,7 +21,7 @@ def init_logging():
     )
 
 
-def get_config():
+def get_config() -> Dict[str, Union[int, float, str, bool]]:
     parser = argparse.ArgumentParser(description="PyTorch MNIST KD Example")
     parser.add_argument("--config-path", type=Path, required=True, metavar="C")
     args = parser.parse_args()
@@ -30,7 +31,7 @@ def get_config():
     return config
 
 
-def get_model(model_type="student"):
+def get_model(model_type: str) -> nn.Module:
     if model_type == "student":
         return NetStudent()
     elif model_type == "teacher":
@@ -41,7 +42,7 @@ def get_model(model_type="student"):
         raise ValueError(f"wrong type of model_type - {model_type}")
 
 
-def set_seed(seed: int):
+def set_seed(seed: int) -> None:
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     random.seed(seed)
@@ -64,7 +65,6 @@ def main():
     distill = config["distill"]
     temperature = config['temperature']
     alpha = config['alpha']
-    unlabeled = config['unlabeled']
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -93,7 +93,6 @@ def main():
         name=name,
         distill=distill,
         teacher=teacher,
-        unlabeled=unlabeled,
         temperature=temperature,
         alpha=alpha
     )
