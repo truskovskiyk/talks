@@ -35,7 +35,8 @@ def plot(result: pd.DataFrame) -> None:
             color="black",
             weight="semibold",
         )
-    plt.show()
+    plt.savefig("result.jpg")
+    # plt.show()
 
 
 def get_image_net_models() -> List[Tuple[str, nn.Module]]:

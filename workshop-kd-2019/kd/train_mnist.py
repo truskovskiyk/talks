@@ -84,6 +84,7 @@ def main():
 
     print(f"teacher model = {teacher}")
     print(model)
+
     mnist_trainer = MNISTTrainer(
         model=model,
         train_loader=train_loader,

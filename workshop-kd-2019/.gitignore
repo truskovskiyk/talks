@@ -111,3 +111,4 @@ mnist_train_teacher
 mnist_train_distill_unlabeled/
 data_mnist/
 *.pth
+*.jpg

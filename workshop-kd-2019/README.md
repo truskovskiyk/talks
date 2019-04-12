@@ -20,6 +20,13 @@ pip install -r requirements.txt
 export PYTHONPATH=.
 ```
 
+or use docker setup
+```bash
+docker build -t kd:latest .
+docker run -it -p 6006:6006 --volume=$(pwd):/workspace kd:latest /bin/bash
+cd /workspace
+export PYTHONPATH=.
+```
 
 # Profile network
 ```bash
