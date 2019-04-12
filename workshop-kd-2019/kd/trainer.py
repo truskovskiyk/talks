@@ -8,29 +8,24 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 
-class Distillation(nn.Module):
+class DistillationLoss(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(self, y, labels, teacher_scores, T, alpha):
-        hard_loss = F.cross_entropy(y, labels)
+    def forward(
+        self,
+        scores: torch.Tensor,
+        labels: torch.Tensor,
+        teacher_scores: torch.Tensor,
+        temperature: float,
+        alpha: float,
+    ):
+        hard_loss = F.cross_entropy(scores, labels)
         soft_loss = nn.KLDivLoss()(
-            F.log_softmax(y / T), F.softmax(teacher_scores / T)
-        ) * (T * T * 2.0)
+            F.log_softmax(scores / temperature), F.softmax(teacher_scores / temperature)
+        ) * (temperature * temperature * 2.0)
 
         return soft_loss * alpha + hard_loss * (1.0 - alpha)
-
-
-def distillation(
-    y: torch.Tensor,
-    labels: torch.Tensor,
-    teacher_scores: torch.Tensor,
-    T: float,
-    alpha: float,
-) -> torch.Tensor:
-    return nn.KLDivLoss()(F.log_softmax(y / T), F.softmax(teacher_scores / T)) * (
-        T * T * 2.0 * alpha
-    ) + F.cross_entropy(y, labels) * (1.0 - alpha)
 
 
 class MNISTTrainer:
@@ -65,6 +60,7 @@ class MNISTTrainer:
 
         self.temperature = temperature
         self.alpha = alpha
+        self.distillation_loss = DistillationLoss()
 
     def train_model(self) -> None:
         for epoch in tqdm(range(1, self.n_epoch + 1)):
@@ -82,9 +78,14 @@ class MNISTTrainer:
             if self.distill:
                 teacher_output = self.teacher(data)
                 teacher_output = teacher_output.detach()
-                loss = distillation(
-                    output, target, teacher_output, T=self.temperature, alpha=self.alpha
+                loss = self.distillation_loss(
+                    scores=output,
+                    labels=target,
+                    teacher_scores=teacher_output,
+                    temperature=self.temperature,
+                    alpha=self.alpha,
                 )
+
             else:
                 loss = F.cross_entropy(output, target)
             loss.backward()
@@ -107,7 +108,7 @@ class MNISTTrainer:
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
                 output = self.model(data)
-                test_loss += F.cross_entropy(output, target).item()  # sum up batch loss
+                test_loss += F.cross_entropy(output, target).item()
                 pred = output.max(1, keepdim=True)[
                     1
                 ]  # get the index of the max log-probability

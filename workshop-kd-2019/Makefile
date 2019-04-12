@@ -13,7 +13,7 @@ setup:
 .PHONY: lint
 lint:
 	black --check kd tests
-	flake8 kd tests
+	flake8 --max-line-length 89 kd tests
 	isort -rc -c kd tests
 
 .PHONY: format
