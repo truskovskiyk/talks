@@ -1,9 +1,7 @@
 torch==1.0.1.post2
 tensorboardX==1.6
 torchvision==0.2.2.post3
-git+https://github.com/sovrasov/flops-counter.pytorch.git
 git+https://github.com/Lyken17/pytorch-OpCounter.git
-pthflops==0.1.0
 matplotlib==2.2.2
 tqdm==4.31.1
 ipython==7.4.0

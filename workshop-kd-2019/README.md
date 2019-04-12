@@ -9,7 +9,7 @@
 
 ## Presentation
 
-[Slides](https://docs.google.com/presentation/d/10TYXI0ySctLna9lWDvTMr9HbCf4aqXfagLc0a_OV5mk/edit#slide=id.p5)
+[Slides](https://docs.google.com/presentation/d/1yB9xLhz4g3Cch1Y5iUPVrKw0my-bULMazzNb8hll938/edit?usp=sharing)
 
 
 # Setup
@@ -20,6 +20,13 @@ pip install -r requirements.txt
 export PYTHONPATH=.
 ```
 
+or use docker setup
+```bash
+docker build -t kd:latest .
+docker run -it -p 6006:6006 --volume=$(pwd):/workspace kd:latest /bin/bash
+cd /workspace
+export PYTHONPATH=.
+```
 
 # Profile network
 ```bash
