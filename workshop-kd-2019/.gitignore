@@ -105,3 +105,9 @@ venv.bak/
 .idea/
 articles/
 .DS_Store
+mnist_train_distill
+mnist_train_student
+mnist_train_teacher
+mnist_train_distill_unlabeled/
+data_mnist/
+*.pth
