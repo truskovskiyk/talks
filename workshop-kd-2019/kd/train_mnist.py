@@ -1,16 +1,18 @@
 import argparse
 import json
-from pathlib import Path
 import logging
+import random
+from pathlib import Path
+from typing import Dict, Union
 
+import numpy as np
 import torch
 import torch.nn as nn
-import numpy as np
-import random
+
 from kd.models import NetStudent, NetTeacher
 from kd.trainer import MNISTTrainer
 from kd.utils import get_mnist_loaders
-from typing import Dict, Union
+
 logger = logging.getLogger(__name__)
 
 
@@ -63,8 +65,8 @@ def main():
     n_epoch = config["n_epoch"]
     name = config["name"]
     distill = config["distill"]
-    temperature = config['temperature']
-    alpha = config['alpha']
+    temperature = config["temperature"]
+    alpha = config["alpha"]
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -94,7 +96,7 @@ def main():
         distill=distill,
         teacher=teacher,
         temperature=temperature,
-        alpha=alpha
+        alpha=alpha,
     )
     mnist_trainer.train_model()
 

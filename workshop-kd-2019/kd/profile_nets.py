@@ -1,29 +1,40 @@
-from torchvision import models
-import seaborn as sns
+from typing import List, Tuple
+
 import matplotlib.pyplot as plt
 import pandas as pd
-
-from typing import List, Tuple
+import seaborn as sns
 import torch.nn as nn
 from thop import profile
+from torchvision import models
 from tqdm import tqdm
 
 from kd.models import NetStudent, NetTeacher
 
 
 def plot(result: pd.DataFrame) -> None:
-    sns.set(rc={'figure.figsize': (16, 16)})
-    p1 = sns.regplot(data=result, x="gflops", y="params", fit_reg=False,
-                     marker="o",
-                     color="skyblue", scatter_kws={'s': 400})
+    sns.set(rc={"figure.figsize": (16, 16)})
+    p1 = sns.regplot(
+        data=result,
+        x="gflops",
+        y="params",
+        fit_reg=False,
+        marker="o",
+        color="skyblue",
+        scatter_kws={"s": 400},
+    )
 
     # add annotations one by one with a loop
     for line in range(0, result.shape[0]):
         print(result.model_name[line])
-        p1.text(result.gflops[line] + 0.2, result.params[line],
-                result.model_name[line],
-                horizontalalignment='left', size='medium', color='black',
-                weight='semibold')
+        p1.text(
+            result.gflops[line] + 0.2,
+            result.params[line],
+            result.model_name[line],
+            horizontalalignment="left",
+            size="medium",
+            color="black",
+            weight="semibold",
+        )
     plt.show()
 
 
@@ -54,8 +65,7 @@ def build_image_net_plot() -> None:
         flops, params = profile(model, input_size=input_size)
         gflops = flops / 1_000_000_000
         params = params / 1_000_000
-        result.append(
-            {"model_name": model_name, "gflops": gflops, "params": params})
+        result.append({"model_name": model_name, "gflops": gflops, "params": params})
     result = pd.DataFrame(result)
     print(result)
     plot(result)
@@ -63,10 +73,7 @@ def build_image_net_plot() -> None:
 
 def build_mnist_plot() -> None:
 
-    image_net_models = [
-        ('NetStudent', NetStudent()),
-        ('NetTeacher', NetTeacher())
-    ]
+    image_net_models = [("NetStudent", NetStudent()), ("NetTeacher", NetTeacher())]
     input_size = (1, 1, 28, 28)
     result = []
     for model_name, model in tqdm(image_net_models):
@@ -74,8 +81,7 @@ def build_mnist_plot() -> None:
         flops, params = profile(model, input_size=input_size)
         gflops = flops / 1_000_000_000
         params = params / 1_000_000
-        result.append(
-            {"model_name": model_name, "gflops": gflops, "params": params})
+        result.append({"model_name": model_name, "gflops": gflops, "params": params})
     result = pd.DataFrame(result)
     print(result)
     plot(result)

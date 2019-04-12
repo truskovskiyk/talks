@@ -1,9 +1,10 @@
+from typing import Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
-from typing import Optional
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 
@@ -13,36 +14,40 @@ class Distillation(nn.Module):
 
     def forward(self, y, labels, teacher_scores, T, alpha):
         hard_loss = F.cross_entropy(y, labels)
-        soft_loss = nn.KLDivLoss()(F.log_softmax(y / T),
-                                   F.softmax(teacher_scores / T)) * (
-                            T * T * 2.0)
+        soft_loss = nn.KLDivLoss()(
+            F.log_softmax(y / T), F.softmax(teacher_scores / T)
+        ) * (T * T * 2.0)
 
         return soft_loss * alpha + hard_loss * (1.0 - alpha)
 
 
-def distillation(y: torch.Tensor, labels: torch.Tensor, teacher_scores: torch.Tensor, T: float, alpha: float) -> torch.Tensor:
-    return nn.KLDivLoss()(F.log_softmax(y / T),
-                          F.softmax(teacher_scores / T)) * (
-                   T * T * 2.0 * alpha
-           ) + F.cross_entropy(y, labels) * (1.0 - alpha)
-
+def distillation(
+    y: torch.Tensor,
+    labels: torch.Tensor,
+    teacher_scores: torch.Tensor,
+    T: float,
+    alpha: float,
+) -> torch.Tensor:
+    return nn.KLDivLoss()(F.log_softmax(y / T), F.softmax(teacher_scores / T)) * (
+        T * T * 2.0 * alpha
+    ) + F.cross_entropy(y, labels) * (1.0 - alpha)
 
 
 class MNISTTrainer:
     def __init__(
-            self,
-            model: nn.Module,
-            train_loader: DataLoader,
-            test_loader: DataLoader,
-            lr: float,
-            device,
-            log_interval: int,
-            n_epoch: int,
-            name: str,
-            distill: bool,
-            teacher: Optional[nn.Module],
-            temperature: Optional[float],
-            alpha: Optional[float]
+        self,
+        model: nn.Module,
+        train_loader: DataLoader,
+        test_loader: DataLoader,
+        lr: float,
+        device,
+        log_interval: int,
+        n_epoch: int,
+        name: str,
+        distill: bool,
+        teacher: Optional[nn.Module],
+        temperature: Optional[float],
+        alpha: Optional[float],
     ) -> None:
 
         self.model = model
@@ -77,9 +82,9 @@ class MNISTTrainer:
             if self.distill:
                 teacher_output = self.teacher(data)
                 teacher_output = teacher_output.detach()
-                loss = distillation(output, target, teacher_output,
-                                        T=self.temperature,
-                                        alpha=self.alpha)
+                loss = distillation(
+                    output, target, teacher_output, T=self.temperature, alpha=self.alpha
+                )
             else:
                 loss = F.cross_entropy(output, target)
             loss.backward()
