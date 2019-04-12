@@ -9,7 +9,7 @@
 
 ## Presentation
 
-[Slides](https://docs.google.com/presentation/d/10TYXI0ySctLna9lWDvTMr9HbCf4aqXfagLc0a_OV5mk/edit#slide=id.p5)
+[Slides](https://docs.google.com/presentation/d/1yB9xLhz4g3Cch1Y5iUPVrKw0my-bULMazzNb8hll938/edit?usp=sharing)
 
 
 # Setup
