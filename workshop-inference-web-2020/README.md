@@ -75,7 +75,7 @@ gunicorn -w 4 --bind 0.0.0.0:8080 qqp_inference.app_aiohttp:app  --worker-class 
 run torch server
 
 ```
-torch-model-archiver --model-name "distilbert-qqp" --version 1.0 --serialized-file ./distilbert-qqp/pytorch_model.bin --extra-files "./distilbert-qqp/config.json,./distilbert-qqp/vocab.txt" -f --handler "./qqp_inference/serve_handler.py"
+torch-model-archiver --model-name "distilbert-qqp" --version 1.0 --serialized-file ./distilbert-qqp/pytorch_model.bin --extra-files "./distilbert-qqp/config.json,./distilbert-qqp/vocab.txt,./distilbert-qqp/tokenizer_config.json" -f --handler "./qqp_inference/serve_handler.py"
 torchserve --ts-config torchserve.config --start --model-store ./ --models qqp=distilbert-qqp.mar
 torchserve --ts-config torchserve.config --stop --model-store ./ --models qqp=distilbert-qqp.mar
 

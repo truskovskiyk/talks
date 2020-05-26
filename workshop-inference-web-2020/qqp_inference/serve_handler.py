@@ -3,6 +3,7 @@ from abc import ABC
 
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import DistilBertForSequenceClassification, DistilBertTokenizer
 from ts.torch_handler.base_handler import BaseHandler
 
 logger = logging.getLogger(__name__)
@@ -22,8 +23,8 @@ class TransformersClassifierHandler(BaseHandler, ABC):
         model_dir = properties.get("model_dir")
         self.device = torch.device("cuda:" + str(properties.get("gpu_id")) if torch.cuda.is_available() else "cpu")
         # Read model serialize/pt file
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_dir)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        self.model = DistilBertForSequenceClassification.from_pretrained(model_dir)
+        self.tokenizer = DistilBertTokenizer.from_pretrained(model_dir)
         self.model.to(self.device)
         self.model.eval()
         logger.debug("Transformer model from path {0} loaded successfully".format(model_dir))
@@ -33,17 +34,21 @@ class TransformersClassifierHandler(BaseHandler, ABC):
         logger.info(f"Received text: {data} {type(data)}")
         # we work only with batch size = 1
         payload = data[0]["body"]
-        inputs = self.tokenizer.encode_plus(payload["q1"], payload["q2"], add_special_tokens=True, return_tensors="pt")
-        return inputs
+        text_a = payload["q1"]
+        text_b = payload["q2"]
+        multi_seg_input = self.tokenizer.encode_plus(text_a, text_b, add_special_tokens=True, return_tensors="pt")
+        return multi_seg_input
 
-    def inference(self, inputs):
-        prediction = self.model(
-            inputs["input_ids"].to(self.device), attention_mask=inputs["attention_mask"].to(self.device)
-        )[0]
+    def inference(self, multi_seg_input):
+        bert_outputs = self.model(
+            input_ids=multi_seg_input["input_ids"], attention_mask=multi_seg_input["attention_mask"]
+        )
         # we work only with batch size = 1
-        prediction = torch.softmax(prediction, dim=1)[0][1].item()
-        logger.info("Model predicted: '%s'", prediction)
-        return [prediction]
+        bert_softmax = torch.softmax(bert_outputs[0], dim=1)[0]
+        logger.info(f"bert_softmax: {bert_softmax}")
+        bert_score = bert_softmax[1].item()
+        logger.info(f"Model predicted: '{bert_score}'")
+        return [bert_score]
 
     def postprocess(self, inference_output):
         result = [{"score": inference_output[0], "is_duplicate": inference_output[0] > self.model_threshold,}]
