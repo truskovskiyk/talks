@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-from pprint import pprint
 from typing import Any, Dict, List, Union
 
 import boto3
@@ -60,31 +59,3 @@ class PythonPredictor:
                 "model_version": self.model_version,
             }
             return result
-
-    @classmethod
-    def create_for_demo(cls) -> "PythonPredictor":
-        config = {
-            "bucket_name": "models-for-demo",
-            "model_s3_path": "distilbert-qqp",
-            "model_version": 1,
-            "model_threshold": 0.5,
-        }
-
-        return cls(config=config)
-
-
-if __name__ == "__main__":
-    predictor = PythonPredictor.create_for_demo()
-
-    p1 = predictor.predict(
-        payload={"q1": "What is the responsibility of SAP ERP key user?", "q2": "What is a qualified SAP ERP key user?"}
-    )
-    pprint(p1)
-
-    p2 = predictor.predict(
-        payload={
-            "q1": "Which is the best book to study TENSOR for general relativity from basic?",
-            "q2": "Which is the best book for tensor calculus?",
-        }
-    )
-    pprint(p2)

@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
-from qqp_inference.model import PythonPredictor
+from flask import Flask, jsonify, request
 
+from qqp_inference.model import PythonPredictor
 
 app = Flask(__name__)
 predictor = PythonPredictor.create_for_demo()

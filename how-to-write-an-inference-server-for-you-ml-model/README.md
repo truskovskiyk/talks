@@ -84,8 +84,32 @@ http POST http://0.0.0.0:8080/predictions/qqp < example.json
 ```
 
 
-# Type 3
+# Type 3: Use a platform
+
+(Optional) Install cortex
+```
+bash -c "$(curl -sS https://raw.githubusercontent.com/cortexlabs/cortex/0.17/get-cli.sh)"
+```
+
+(Optional) Set up a cluster
+```
+cd cortex-example
+cortex cluster up --config=cluster.yaml
+cortex cluster info
+```
+
+
+(Optional) Deploy the model
+```
+cd cortex-example
+cortex deploy cortex.yaml
+cortex get distilbert-qqp
+cortex get distilbert-qqp --watch
+cortex delete distilbert-qqp
+```
+
+Test deploy
 
 ```
-https://www.cortex.dev/
+http POST http://a9d4dc576763811eaa4ca0a0fd1f5bcd-621843303.us-west-2.elb.amazonaws.com/distilbert-qqp < example.json
 ```

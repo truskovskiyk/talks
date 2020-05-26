@@ -1,0 +1,12 @@
+- name: distilbert-qqp
+  predictor:
+    type: python
+    path: predictor.py
+    config:
+      bucket_name: models-for-demo
+      model_s3_path: distilbert-qqp
+      model_version: 1
+      model_threshold: 0.5
+  compute:
+    mem: 4G
+    cpu: 1

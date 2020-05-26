@@ -1,4 +1,5 @@
 from aiohttp import web
+
 from qqp_inference.model import PythonPredictor
 
 

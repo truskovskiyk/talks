@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+
 from qqp_inference.model import PythonPredictor
 
 

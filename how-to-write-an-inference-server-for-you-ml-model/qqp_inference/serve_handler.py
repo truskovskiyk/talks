@@ -1,5 +1,5 @@
-from abc import ABC
 import logging
+from abc import ABC
 
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -37,17 +37,16 @@ class TransformersClassifierHandler(BaseHandler, ABC):
         return inputs
 
     def inference(self, inputs):
-        prediction = self.model(inputs["input_ids"].to(self.device), attention_mask=inputs["attention_mask"].to(self.device))[0]
+        prediction = self.model(
+            inputs["input_ids"].to(self.device), attention_mask=inputs["attention_mask"].to(self.device)
+        )[0]
         # we work only with batch size = 1
         prediction = torch.softmax(prediction, dim=1)[0][1].item()
         logger.info("Model predicted: '%s'", prediction)
         return [prediction]
 
     def postprocess(self, inference_output):
-        result = [{
-            "score": inference_output[0],
-            "is_duplicate": inference_output[0] > self.model_threshold,
-        }]
+        result = [{"score": inference_output[0], "is_duplicate": inference_output[0] > self.model_threshold,}]
         return result
 
 
