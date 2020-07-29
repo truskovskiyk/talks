@@ -16,5 +16,5 @@ torch-model-archiver==0.1.0b20200409
 httpie==2.1.0
 awscli==1.18.66
 wandb==0.8.36
-uvicorn==0.11.5
+uvicorn==0.11.7
 isort==4.3.21
