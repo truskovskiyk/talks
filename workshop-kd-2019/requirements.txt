@@ -7,4 +7,4 @@ tqdm==4.31.1
 ipython==7.4.0
 seaborn==0.9.0
 tensorboard==1.13.1
-tensorflow==1.15.2
+tensorflow==2.5.0
