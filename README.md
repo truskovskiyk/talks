@@ -8,3 +8,4 @@ Materials from talks I gave
 4. [scalable-hyperparameter-search-2019](https://github.com/truskovskiyk/talks/tree/master/scalable-hyperparameter-search)
 5. [unsupervised-data-augmentation-2019](https://github.com/truskovskiyk/talks/tree/master/unsupervised-data-augmentation)
 6. [workshop-inference-web-2020](https://github.com/truskovskiyk/talks/tree/master/workshop-inference-web-2020)
+7. [how-to-serve-your-ml-models-in-the-production](https://github.com/truskovskiyk/talks/tree/master/how-to-serve-your-ml-models-in-the-production)
