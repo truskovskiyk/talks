@@ -1,7 +1,7 @@
 torch==0.4.1
 torchvision==0.2.1
 tensorboardX==1.4
-tensorflow==1.15.2
+tensorflow==2.7.2
 tqdm==4.26.0
 ipython==7.0.1
 imbalanced-learn==0.3.3
